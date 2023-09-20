@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+  currency-exhange:
+    image: meliksahselvi/sc-currency-exchange-service:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8000:8000"
+    networks:
+      - currency-network
+    depends_on:
+      - service-registry
+    #environment service-registry'e localde iken localhost ile bağlanıyorduk.
+    #uygulama dockerda çalışırken bizim localimizdeki portları değil kendi portlarını görebilir
+    #biz de docker'daki service registry adını kullanıyoruz.
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+
+  currency-conversion:
+    image: meliksahselvi/sc-currency-conversion-service:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8100:8100"
+    networks:
+      - currency-network
+    depends_on:
+      - service-registry
+    #environment service-registry'e localde iken localhost ile bağlanıyorduk.
+    #uygulama dockerda çalışırken bizim localimizdeki portları değil kendi portlarını görebilir
+    #biz de docker'daki service registry adını kullanıyoruz.
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+
+
+  api-gateway:
+    image: meliksahselvi/sc-api-gateway:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8765:8765"
+    networks:
+      - currency-network
+    depends_on:
+      - service-registry
+    #environment service-registry'e localde iken localhost ile bağlanıyorduk.
+    #uygulama dockerda çalışırken bizim localimizdeki portları değil kendi portlarını görebilir
+    #biz de docker'daki service registry adını kullanıyoruz.
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+
+  service-registry:
+    image: meliksahselvi/sc-service-registry:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8761:8761"
+    networks:
+      - currency-network
+
+  zipkin-server:
+    image: openzipkin/zipkin:2.23
+    mem_limit: 300m
+    ports:
+      - "9411:9411"
+    networks:
+      - currency-network
+
+networks:
+  currency-network:
