@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/currency-exchange")
+@RequestMapping
 public class CurrencyExchangeController {
 
     private Logger logger= LoggerFactory.getLogger(CurrencyExchangeController.class);
@@ -29,7 +29,12 @@ public class CurrencyExchangeController {
         this.repository = repository;
     }
 
-    @GetMapping("/from/{from}/to/{to}")
+    @GetMapping
+    public String hello(){
+        return "Welcome";
+    }
+
+    @GetMapping("/currency-exchange/from/{from}/to/{to}")
     public CurrencyExchange retrieveExchangeValue(@PathVariable String from, @PathVariable String to) {
         /*
         * bu kod satırı çalıştığında log info olarak zipkin pattern'i ile birlikte bu mesaj verilecek.
