@@ -34,7 +34,6 @@ services:
       MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
 
-
   api-gateway:
     image: meliksahselvi/sc-api-gateway:0.0.1-SNAPSHOT
     mem_limit: 700m

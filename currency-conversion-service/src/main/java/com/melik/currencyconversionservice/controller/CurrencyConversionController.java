@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 
 @RestController
-@RequestMapping("/currency-conversion")
+@RequestMapping
 public class CurrencyConversionController {
 
     @Value("${application.hostname}")
@@ -33,7 +33,12 @@ public class CurrencyConversionController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/from/{from}/to/{to}/quantity/{quantity}")
+    @GetMapping
+    public String hello() {
+        return "Hello From Currency Conversion Service";
+    }
+
+    @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversion calculateCurrencyConversion(
             @PathVariable String from,
             @PathVariable String to,
@@ -58,7 +63,7 @@ public class CurrencyConversionController {
 
     }
 
-    @GetMapping("/feign-from/{from}/to/{to}/quantity/{quantity}")
+    @GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversion calculateCurrencyConversionFeign(@PathVariable String from, @PathVariable String to, @PathVariable BigDecimal quantity) {
 
         CurrencyConversion currencyConversion = proxy.retrieveExchangeValue(from, to);
